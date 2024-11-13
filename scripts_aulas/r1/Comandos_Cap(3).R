@@ -27,8 +27,8 @@ suppressMessages(library(moments))
 #-------------------------------------------------------------------------------
 #Análise Covid SM - Médias Móveis
 #-------------------------------------------------------------------------------
-covidsm<-read_excel("Covid_SM(2).xlsx",col_types = c("date", "numeric"))
-covidsm<-read_excel("Covid_SM.xlsx",col_types = c("date", "numeric"))
+covidsm<-read_excel("scripts_aulas/r1/Covid_SM(2).xlsx",col_types = c("date", "numeric"))
+covidsm<-read_excel("scripts_aulas/r1/covid_sm.xlsx",col_types = c("date", "numeric"))
 t<-1:length(covidsm$date)
 n<-length(covidsm$date)
 smac<-SMA(x=covidsm$confirmed,n=7)
