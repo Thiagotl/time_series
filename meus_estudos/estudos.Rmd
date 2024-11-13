@@ -9,16 +9,18 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+Função de autocovariância  e autocorrelação
 
 ```{r facv and fac}
 
 Z = ts(c(510, 457, 474, 526, 550, 542),
        start = 2009)
 # Função de autocovariancia (facv)
-acf(Z, type = 'covariance')
+acf(Z, type = 'covariance', main = "", xlab="Defasagem",
+    ylab="Autocovariância")
 # Função de autocorrelação (fac)
 
-acf(Z)
+acf(Z, mais= "", xlab="defasagem", ylab="Autocorrelção")
 
 ```
 
