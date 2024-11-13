@@ -1,0 +1,24 @@
+---
+title: "Séries Temporais"
+author: "Thiago Tavares Lopes"
+date: "2024-11-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r facv and fac}
+
+Z = ts(c(510, 457, 474, 526, 550, 542),
+       start = 2009)
+# Função de autocovariancia (facv)
+acf(Z, type = 'covariance')
+# Função de autocorrelação (fac)
+
+acf(Z)
+
+```
+
