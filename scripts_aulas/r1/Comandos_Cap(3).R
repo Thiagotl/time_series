@@ -113,7 +113,7 @@ sma.for<-function(x,k,h,conf,plot=TRUE)
 #-------------------------------------------------------------------------------
 #Exemplo
 #-------------------------------------------------------------------------------
-x <-read_excel("temp.xlsx")
+x <-read_excel("scripts_aulas/r1/temp.xlsx")
 x<-x$Temperatura
 sma.for(x=x,k=15,h=10,conf=0.95,plot=TRUE)
 sma.for(x=x,k=15,h=10,conf=0.95,plot=FALSE)
