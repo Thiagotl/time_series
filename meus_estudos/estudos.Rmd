@@ -23,4 +23,4 @@ acf(Z, type = 'covariance', main = "", xlab="Defasagem",
 acf(Z, mais= "", xlab="defasagem", ylab="Autocorrelção")
 
 ```
-
+# Series Estacionárias
