@@ -51,6 +51,48 @@ acf(rb,lag.max = 100,type="correlation")
 
 
 
+#-------------------------------------------------------------------------------
+
+# BOX-PIERCE TEST
+set.seed(1087)
+rb<-rnorm (200)
+rb<-ts(rb)
+autoplot(rb)+labs(x="Time", y="Ruído branco Simulado")+theme_minimal()
+ggAcf(rb, lag.max=100, type = c("correlation")) +labs(y="FAC Amostral", title = "")+theme_minimal()
+
+Box.test(x=rb, lag=10, type="Box-Pierce")
+
+
+#-------------------------------------------------------------------------------
+
+# LJUNG-BOX TEST 
+
+#suppressWarnings(library(FitAR))
+
+
+set.seed(1087)
+
+
+#Ruído Branco
+rb<-rnorm(200)
+ggAcf(rb,lag.max=100, type = c("correlation"))+labs(y = "FAC Amostral ", title="" )+theme_minimal()
+
+
+Box.test(x=rb, lag=10, type="Ljung-Box")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
