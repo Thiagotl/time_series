@@ -21,6 +21,7 @@ autoplot(rb)+labs(x = "Time", y = "Ruído Branco Simulado")+theme_minimal()
 ggAcf(rb, lag.max=100,type = c("correlation"))+labs(y = "FAC Amostral",title="")+theme_minimal()
 ggAcf(rb, lag.max=100,type = c("partial"))+labs(y = "FACP Amostral",title="")+theme_minimal()
 #-------------------------------------------------------------------------------
+# Random walk
 random_walk<-function(n,prob)
 {
   x<-rbinom(n,1,prob)
