@@ -64,10 +64,10 @@ summary(modelo_ets_diff)
 
 
 
-tsdisplay(modelo_ets$residuals)
-Box.test(modelo_ets$residuals,lag=10)
+tsdisplay(modelo_ets_diff$residuals)
+Box.test(modelo_ets_diff$residuals,lag=10)
 
-modelo_ets$residuals
+modelo_ets_diff$residuals
 
 
 
