@@ -33,7 +33,7 @@ library(ggplot2)
 
 # Dados mensais ================================================================
 # Leitura do banco de dados
-dados<-readxl::read_excel("ipeadata[03-04-2024-01-55].xls")
+dados<-readxl::read_excel("scripts_aulas/r2/ipeadata[03-04-2024-01-55].xls")
 y<-dados$`Exportações - preços - índice (média 2018 = 100) - - - Fundação Centro de Estudos do Comércio Exterior (Funcex) - FUNCEX12_XPT12 -`
 min(dados$Data) # Data inicial
 d1<-ts(y,start = c(1977,01),frequency = 12)# Mensal frequencia = 12

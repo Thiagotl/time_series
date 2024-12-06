@@ -69,8 +69,9 @@ Box.test(modelo_ets_diff$residuals,lag=10)
 
 modelo_ets_diff$residuals
 
+checkresiduals(modelo_ets_diff)
 
-
+ggqqplot(modelo_ets_diff$residuals)+ggtitle("Res?duos Modelo SES")
 
 
 
@@ -91,12 +92,17 @@ sazonalidade(data_serie)
 
 
 
+# varificando ARIMA
+
+modelo_arima <- auto.arima(data_serie_diff)
+summary(modelo_arima)
 
 
 
+checkresiduals(modelo_arima)
 
 
-
-
+previsao <- forecast(modelo_arima, h = 12)
+plot(previsao)
 
 
