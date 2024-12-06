@@ -2,12 +2,11 @@
 #https://www.kaggle.com/code/farzadnekouei/gold-price-prediction-lstm-96-accuracy
 
 
-
-library(readr)
-library(tidyverse)
-library(lubridate)
-library(tseries)
-
+suppressMessages(library(forecast))
+suppressMessages(library(tseries))
+suppressMessages(library(lubridate))
+suppressMessages(library(tidyverse))
+suppressMessages(library(readr))
 
 
 
@@ -23,26 +22,78 @@ media_mensal <- dados |>
   mutate(Month = floor_date(Date, "month")) |> 
   group_by(Month) |> 
   summarise(Average_Price = mean(Price, na.rm = TRUE))
-View(media_mensal)
+#View(media_mensal)
 
 
-data_series<-ts(media_mensal$Average_Price, frequency=12, start=c(2013,1))
-plot(data_series)
+data_serie<-ts(media_mensal$Average_Price, frequency=12, start=c(2013,1))
+plot(data_serie)
 
 
 
 
 ## Verificar a Estacionaridade ------------------------------------------------ 
 
-adf.test(data_series, alternative = "stationary")
+adf.test(data_serie, alternative = "stationary")
+
+decomposicao <- decompose(ts(data_serie, frequency = 12))
+
+plot(decomposicao)
+
+
+data_serie_diff<-diff(data_serie,differences = 1)
+plot(data_serie_diff)
+acf(data_serie_diff)
+adf.test(data_serie_diff, alternative = "stationary")
+
+# library(urca)
+# 
+# teste_kpss <- ur.kpss(data_serie)
+# 
+# summary(teste_kpss)
+
+
+modelo_ets <- ets(data_serie)
+
+summary(modelo_ets)
+# RESULTADO - ERRO MULTIPĹICATIVO, SEM TENDÊNCIA E SEM SAZONALIDADE 
 
 
 
-library(urca)
+modelo_ets_diff <- ets(data_serie_diff)
+summary(modelo_ets_diff)
 
-teste_kpss <- ur.kpss(data_series)
 
-summary(teste_kpss)
+
+tsdisplay(modelo_ets$residuals)
+Box.test(modelo_ets$residuals,lag=10)
+
+modelo_ets$residuals
+
+
+
+
+
+
+# USANDO AS FUNÇÕES ---------------------------
+
+source("trab_final/functions.R")
+
+
+tend_determ(data_serie)
+
+raiz_unit(data_serie)
+
+sazonalidade(data_serie)
+
+
+
+
+
+
+
+
+
+
 
 
 
