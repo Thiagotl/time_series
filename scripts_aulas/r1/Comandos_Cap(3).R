@@ -155,7 +155,9 @@ ggplot(df.icv, aes(x=t, y=icv)) +
 #-------------------------------------------------------------------------------
 #Análise ICV - Tendência Polinomial - Reta - MQO
 #-------------------------------------------------------------------------------
-icv <- read_excel("icv.xlsx", col_types = c("date","numeric"))
+
+
+icv <- read_excel("scripts_aulas/r1/icv.xlsx", col_types = c("date","numeric"))
 n<-length(icv$icv)
 t<-1:n
 df.icv<-as.data.frame(cbind(t,icv))
