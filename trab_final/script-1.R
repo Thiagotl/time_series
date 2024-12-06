@@ -99,7 +99,7 @@ modelo <- lm(data_serie_diff ~ seq_along(data_serie_diff))
 summary(modelo)
 # varificando ARIMA
 
-modelo_arima <- auto.arima(data_serie_diff)
+modelo_arima <- auto.arima(data_serie)
 summary(modelo_arima)
 
 
@@ -109,6 +109,10 @@ checkresiduals(modelo_arima)
 
 previsao <- forecast(modelo_arima, h = 12)
 plot(previsao)
+
+
+tsdisplay(modelo_arima$residuals)
+Box.test(modelo_arima$residuals,lag=10)
 
 # validaçaõ modelo ----
 # train_size <- floor(0.8 * length(data_serie_diff))  # 80% para treino
