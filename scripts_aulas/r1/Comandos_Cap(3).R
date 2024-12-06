@@ -29,10 +29,10 @@ suppressMessages(library(moments))
 #-------------------------------------------------------------------------------
 covidsm<-read_excel("scripts_aulas/r1/Covid_SM(2).xlsx",col_types = c("date", "numeric"))
 covidsm<-read_excel("scripts_aulas/r1/covid_sm.xlsx",col_types = c("date", "numeric"))
-t<-1:length(covidsm$date)
-n<-length(covidsm$date)
-smac<-SMA(x=covidsm$confirmed,n=7)
-n1<-length(smac)
+t<-1:length(covidsm$date) # tempo em dias
+n<-length(covidsm$date) # vetor de datas 
+smac<-SMA(x=covidsm$confirmed,n=7) #Calcula a Média Móvel Simples (MMS) dos casos confirmados, com uma janela de 7 dias.
+n1<-length(smac) # Remove os primeiros 6 valores NA, deixando apenas as médias móveis válidas.
 n2<-n1-6
 smac<-smac[7:n1]
 framed<-as.data.frame(cbind(rep("real",n2),covidsm[7:n1,]))
@@ -44,6 +44,7 @@ ggplot(df, aes(x=data, y=dados,group=Legenda,colour=Legenda)) +
   geom_line()+
   scale_color_manual(values = c("real" = "black", "MMS(7)" = "blue3"))+
       labs(y = "Casos Confirmados", x = "Tempo (dias)")+theme_minimal()
+
 #-------------------------------------------------------------------------------
 boxplot(covidsm$confirmed)
 dframe<-as.data.frame(cbind(rep("detrend",n2),covidsm[7:n1,1],covidsm[7:n1,2]-smac))
@@ -51,6 +52,14 @@ colnames(dframe)<-c("Legenda","data","detrend")
 ggplot(dframe, aes(x=data, y=detrend,group=Legenda,colour=Legenda)) +
   geom_line()+scale_color_manual(values = c("detrend" = "black"))+
   labs(y = "Casos Confirmados Sem Tendência", x = "Tempo (dias)")+theme_minimal()
+
+
+# autocorrelação da serie com diferentes defasagens 
+# Em vários lags (como em 3, 6, 10 e 15), a autocorrelação é significativamente 
+# diferente de zero (barras ultrapassam as linhas azuis) - Isso sugere que há dependência temporal nesses lags.
+# A alternância entre correlações positivas e negativas indica a presença de algum padrão periódico ou sazonal na série
+
+
 ggAcf(dframe$detrend, lag.max=20)+labs(y = "FAC Série sem Tendência",title="")+theme_minimal()
 
 #-------------------------------------------------------------------------------
@@ -72,12 +81,20 @@ ggplot(df, aes(x=data, y=dados,group=cond,colour=cond)) +
 #-------------------------------------------------------------------------------
 #Média Móvel Simples
 #-------------------------------------------------------------------------------
+# x = Vetor com os dados observados (série temporal original).
+# k: Tamanho da janela para a média móvel (número de observações usadas no cálculo de cada média)
+# h: Horizonte de previsão (número de passos à frente para prever)
+# conf: Nível de confiança para os intervalos (ex.: 0.95 para 95% de confiança)
+
+
+
+
 sma.for<-function(x,k,h,conf,plot=TRUE)
 {
   z<-c()
   z$Dados<-x
   n<-length(x)
-  y<-ysma<-SMA(x,k)
+  y<-ysma<-SMA(x,k) #calcula a média móvel dos dados observados.
   z$fitted.values<-ysma
   xa<-c(x,rep(NA,h))
   xa[n+1]<-y[n]
@@ -116,7 +133,10 @@ sma.for<-function(x,k,h,conf,plot=TRUE)
 x <-read_excel("scripts_aulas/r1/temp.xlsx")
 x<-x$Temperatura
 sma.for(x=x,k=15,h=10,conf=0.95,plot=TRUE)
-sma.for(x=x,k=15,h=10,conf=0.95,plot=FALSE)
+sma.for(x=x,k=15,h=10,conf=0.95,plot=TRUE)
+
+
+
 #-------------------------------------------------------------------------------
 #Análise ICV - Tendência Polinomial - Reta
 #-------------------------------------------------------------------------------
