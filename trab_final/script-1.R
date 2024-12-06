@@ -39,25 +39,24 @@ decomposicao <- decompose(ts(data_serie, frequency = 12))
 
 plot(decomposicao)
 
+modelo_ets <- ets(data_serie)
+
+summary(modelo_ets)
+
+tsdisplay(modelo_ets$residuals)
+Box.test(modelo_ets$residuals,lag=10)
+
+modelo_ets$residuals
+
+checkresiduals(modelo_ets)
+
+ggqqplot(modelo_ets$residuals)+ggtitle("Res?duos Modelo SES")
+
 
 data_serie_diff<-diff(data_serie,differences = 1)
 plot(data_serie_diff)
 acf(data_serie_diff)
 adf.test(data_serie_diff, alternative = "stationary")
-
-# library(urca)
-# 
-# teste_kpss <- ur.kpss(data_serie)
-# 
-# summary(teste_kpss)
-
-
-modelo_ets <- ets(data_serie)
-
-summary(modelo_ets)
-# RESULTADO - ERRO MULTIPĹICATIVO, SEM TENDÊNCIA E SEM SAZONALIDADE 
-
-
 
 modelo_ets_diff <- ets(data_serie_diff)
 summary(modelo_ets_diff)
