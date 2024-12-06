@@ -88,10 +88,16 @@ sazonalidade(data_serie)
 
 
 
+tend_determ(data_serie_diff)
 
+raiz_unit(data_serie_diff)
 
+sazonalidade(data_serie_diff)
 
+plot(data_serie_diff)
 
+modelo <- lm(data_serie_diff ~ seq_along(data_serie_diff))
+summary(modelo)
 # varificando ARIMA
 
 modelo_arima <- auto.arima(data_serie_diff)
@@ -104,5 +110,36 @@ checkresiduals(modelo_arima)
 
 previsao <- forecast(modelo_arima, h = 12)
 plot(previsao)
+
+# validaçaõ modelo ----
+# train_size <- floor(0.8 * length(data_serie_diff))  # 80% para treino
+# train <- data_serie_diff[1:train_size]  # Conjunto de treinamento
+# test <- data_serie_diff[(train_size + 1):length(data_serie_diff)]  # Conjunto de teste
+# 
+# 
+# modelo_ets <- ets(train)
+# forecast_ets <- forecast(modelo_ets, h = length(test))  # Previsões para o tamanho do teste
+# 
+# 
+# 
+# library(Metrics)
+# 
+# # Previsões e valores reais
+# pred <- as.numeric(forecast_ets$mean)
+# actual <- as.numeric(test)
+# 
+# # Métricas de avaliação
+# mae <- mae(actual, pred)  # Erro Absoluto Médio
+# rmse <- rmse(actual, pred)  # Raiz do Erro Quadrático Médio
+# mape <- mape(actual, pred)  # Erro Percentual Absoluto Médio
+# 
+# # Exiba os resultados
+# cat("MAE:", mae, "\nRMSE:", rmse, "\nMAPE:", mape, "\n")
+# 
+# plot(test, type = "l", col = "red", main = "Previsões vs Valores Reais", ylab = "Valores")
+# lines(pred, col = "blue")
+# legend("topleft", legend = c("Real", "Previsão"), col = c("red", "blue"), lty = 1)
+# 
+# checkresiduals(modelo_ets)
 
 
