@@ -1,0 +1,130 @@
+---
+title: "Séries Temporais"
+author: "Thiago Tavares Lopes Lucas de Bona Sartor"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+header-includes:
+   - \usepackage[brazil]{babel}
+   - \usepackage{bm}
+   - \usepackage{float}
+   - \usepackage{multirow}
+   - \usepackage{tabularx}
+geometry: left=2.5cm, right=2.5cm, top=2cm, bottom=2cm
+output:
+  bookdown::pdf_document2:
+    fig.align: 'center'
+editor_options:
+  chunk_output_type: console
+  markdown: 
+    wrap: sentence
+---
+```{r setup, include=FALSE}
+options(encoding = "UTF-8")
+options(OutDec = ",")
+options(scipen = 999, digits =5)
+``` 
+
+```{r}
+# BIBLIOTECAS
+
+suppressMessages(library(forecast))
+suppressMessages(library(tseries))
+suppressMessages(library(lubridate))
+suppressMessages(library(tidyverse))
+suppressMessages(library(readr))
+suppressMessages(library(ggpubr))
+
+
+```
+
+
+
+```{r}
+
+#DADOS
+
+dados<- read_csv("dados/Gold Price (2013-2023).csv")
+
+dados <- dados |> 
+  mutate(Date = as.Date(Date, format = "%m/%d/%Y"))
+
+media_mensal <- dados |> 
+  mutate(Month = floor_date(Date, "month")) |> 
+  group_by(Month) |> 
+  summarise(Average_Price = mean(Price, na.rm = TRUE))
+#View(media_mensal)
+
+
+data_serie<-ts(media_mensal$Average_Price, frequency=12, start=c(2013,1))
+plot(data_serie)
+acf(data_serie)
+
+```
+
+
+# Introdução 
+
+
+```{r}
+
+# verificar - Sazonalidade, raiz unitaria e tendencia
+
+source("functions.R")
+
+
+tend_determ(data_serie)
+
+raiz_unit(data_serie)
+
+sazonalidade(data_serie)
+
+# resultado - 
+```
+
+```{r}
+
+decomposicao <- decompose(ts(data_serie, frequency = 12))
+
+plot(decomposicao)
+
+```
+
+
+```{r}
+# diferenciação
+
+data_serie_diff<-diff(data_serie,differences = 1)
+plot(data_serie_diff)
+acf(data_serie_diff)
+adf.test(data_serie_diff, alternative = "stationary")
+
+modelo_ets_diff <- ets(data_serie_diff)
+summary(modelo_ets_diff)
+
+tsdisplay(modelo_ets_diff$residuals)
+Box.test(modelo_ets_diff$residuals,lag=10)
+
+modelo_ets_diff$residuals
+
+checkresiduals(modelo_ets_diff)
+
+ggqqplot(modelo_ets_diff$residuals)+ggtitle("Res?duos Modelo SES")
+
+
+tend_determ(data_serie_diff)
+
+raiz_unit(data_serie_diff)
+
+sazonalidade(data_serie_diff)
+
+plot(data_serie_diff)
+
+previsao <- forecast(data_serie_diff, h = 12)
+plot(previsao)
+
+
+
+```
+
+
+
+

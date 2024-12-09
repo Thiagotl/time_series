@@ -7,7 +7,7 @@ suppressMessages(library(tseries))
 suppressMessages(library(lubridate))
 suppressMessages(library(tidyverse))
 suppressMessages(library(readr))
-
+suppressMessages(library(ggpubr))
 
 
 dados<- read_csv("trab_final/dados/Gold Price (2013-2023).csv")
