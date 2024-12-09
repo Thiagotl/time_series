@@ -52,6 +52,33 @@ checkresiduals(modelo_ets)
 
 ggqqplot(modelo_ets$residuals)+ggtitle("Res?duos Modelo SES")
 
+plot(forecast(modelo_ets, h = 12))
+plot(residuals(modelo_ets), main = "Resíduos do Modelo ETS", ylab = "Resíduos")
+
+Acf(residuals(modelo_ets), main = "ACF dos Resíduos")
+
+Box.test(residuals(modelo_ets), lag = 10, type = "Ljung-Box")
+
+
+tend_determ(data_serie)
+
+raiz_unit(data_serie)
+
+sazonalidade(data_serie)
+
+train <- window(data_serie, end = c(2022, 12))
+test <- window(data_serie, start = c(2013, 01))
+
+model_ets <- ets(train)
+
+forecast_ets <- forecast(model_ets, h = length(test))
+plot(forecast_ets)
+lines(test, col = "red")
+
+
+
+# série diferenciada
+
 
 data_serie_diff<-diff(data_serie,differences = 1)
 plot(data_serie_diff)
@@ -79,11 +106,7 @@ ggqqplot(modelo_ets_diff$residuals)+ggtitle("Res?duos Modelo SES")
 source("trab_final/functions.R")
 
 
-tend_determ(data_serie)
 
-raiz_unit(data_serie)
-
-sazonalidade(data_serie)
 
 
 
@@ -113,6 +136,9 @@ plot(previsao)
 
 tsdisplay(modelo_arima$residuals)
 Box.test(modelo_arima$residuals,lag=10)
+
+
+
 
 # validaçaõ modelo ----
 # train_size <- floor(0.8 * length(data_serie_diff))  # 80% para treino

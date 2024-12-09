@@ -23,7 +23,7 @@ options(OutDec = ",")
 options(scipen = 999, digits =5)
 ``` 
 
-```{r}
+```{r, include=FALSE}
 # BIBLIOTECAS
 
 suppressMessages(library(forecast))
@@ -33,12 +33,12 @@ suppressMessages(library(tidyverse))
 suppressMessages(library(readr))
 suppressMessages(library(ggpubr))
 
-
+source("functions.R")
 ```
 
 
 
-```{r}
+```{r, include=FALSE}
 
 #DADOS
 
@@ -55,10 +55,31 @@ media_mensal <- dados |>
 
 
 data_serie<-ts(media_mensal$Average_Price, frequency=12, start=c(2013,1))
+
+
+```
+
+
+
+
+# Introdução 
+
+Nesta seção são apresentados os dados referentes a análise da série temporal de precificação mensal do ouro, entre os anos de 2013 e 2023. O banco de dados pode ser encontrado no link XXXXXXX. 
+
+
+```{r, echo=FALSE}
+# Gráficos
+
 plot(data_serie)
 acf(data_serie)
 pacf(data_serie)
 
+```
+
+
+
+
+```{r}
 
 modelo_ets <- ets(data_serie)
 
@@ -72,18 +93,15 @@ modelo_ets$residuals
 checkresiduals(modelo_ets)
 
 ggqqplot(modelo_ets$residuals)+ggtitle("Res?duos Modelo SES")
-
 ```
 
-
-# Introdução 
 
 
 ```{r}
 
 # verificar - Sazonalidade, raiz unitaria e tendencia
 
-source("functions.R")
+
 
 
 tend_determ(data_serie)
