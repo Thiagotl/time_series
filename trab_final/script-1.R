@@ -33,9 +33,9 @@ plot(data_serie)
 
 ## Verificar a Estacionaridade ------------------------------------------------ 
 
-adf.test(data_serie, alternative = "stationary")
+#adf.test(data_serie, alternative = "stationary")
 
-decomposicao <- decompose(ts(data_serie, frequency = 12))
+#decomposicao <- decompose(ts(data_serie, frequency = 12))
 
 plot(decomposicao)
 
@@ -74,6 +74,23 @@ model_ets <- ets(train)
 forecast_ets <- forecast(model_ets, h = length(test))
 plot(forecast_ets)
 lines(test, col = "red")
+
+
+
+
+modelo_ets_2<-ets(data_serie, model="MAN")
+
+summary(modelo_ets_2)
+
+Box.test(modelo_ets_2$residuals,  lag = 10, type = "Ljung-Box")
+
+
+forecast_ets <- forecast(modelo_ets_2, h = 12)
+plot(forecast_ets)
+lines(test, col = "red")
+
+
+
 
 
 
@@ -172,3 +189,28 @@ Box.test(modelo_arima$residuals,lag=10)
 # checkresiduals(modelo_ets)
 
 
+###
+
+
+mediassss <- c(24.07740, forecast(modelo)$mean) #ultima valor real dos dados, previsão do modelo
+
+cd<-rep("NA",length(dados))
+cd2 <- rep("NA",length(dados)-1)
+fig <- plot_ly(y = dados, name = 'Dados', type = 'scatter', mode = 'lines') 
+fig <- fig %>% add_trace(y = c(cd2, mediassss), name = 'Previsão', mode = 'lines',line = list(color = 'red'))
+fig <- fig %>% layout(title =paste0("Previsão da temperatura em Porto Alegre"),
+                      xaxis = list(title = 'Tempo'),
+                      yaxis = list (title = 'Dados'))
+fig
+
+reais <- c(24.27608696, 25.92715517, 24.50567568, 21.64853556, 16.69392713, 
+           17.37111111, 13.73602151, 15.59475806, 18.74027778, 20.63606999, 23.14166667)
+
+fig <- plot_ly(y = reais, name = 'Dados em 2024', type = 'scatter', mode = 'lines')
+fig <- fig %>% add_trace(y = forecast(modelo)$lower[,2][c(1:11)], name = 'LI', mode = 'lines',line = list(color = 'green')) 
+fig <- fig %>% add_trace(y = forecast(modelo)$upper[,2][c(1:11)], name = 'LS', mode = 'lines',line = list(color = 'green'))
+fig <- fig %>% layout(title =paste0("Previsão da temperatura em Porto Alegre"),
+                      xaxis = list(title = 'Tempo'),
+                      yaxis = list (title = 'Dados'))
+
+fig
