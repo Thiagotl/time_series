@@ -78,20 +78,23 @@ lines(test, col = "red")
 
 
 
-modelo_ets_2<-ets(data_serie, model="MAN")
+modelo_ets_2<-ets(data_serie, model="MAN", damped = TRUE)
 
 summary(modelo_ets_2)
 
 Box.test(modelo_ets_2$residuals,  lag = 10, type = "Ljung-Box")
 
 
-forecast_ets <- forecast(modelo_ets_2, h = 12)
+forecast_ets <- forecast(modelo_ets_2, h = 24)
 plot(forecast_ets)
 lines(test, col = "red")
 
 
+Acf(residuals(modelo_ets_2), main = "ACF dos Resíduos")
 
+plot(residuals(modelo_ets_2), main = "Resíduos do Modelo ETS", ylab = "Resíduos")
 
+checkresiduals(modelo_ets_2)
 
 
 # série diferenciada
