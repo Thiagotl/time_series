@@ -32,6 +32,8 @@ suppressMessages(library(lubridate))
 suppressMessages(library(tidyverse))
 suppressMessages(library(readr))
 suppressMessages(library(ggpubr))
+suppressMessages(library(ggplot2))
+
 
 source("functions.R")
 ```
@@ -67,19 +69,24 @@ data_serie<-ts(media_mensal$Average_Price, frequency=12, start=c(2013,1))
 Nesta seção são apresentados os dados referentes a análise da série temporal de precificação mensal do ouro, entre os anos de 2013 e 2023. O banco de dados pode ser encontrado no link XXXXXXX. 
 
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, fig.align='center',label="fig1"}
 # Gráficos
 
-plot(data_serie)
-acf(data_serie)
-pacf(data_serie)
+plot(data_serie, ylab = "Preço Mensal" ,main = "Precificação mensal do Ouro - 2013 a 2023")
+
+```
+
+
+```{r, echo=FALSE, label="fig2", fig.width=10, fig.height=8, fig.align='center'}
+par(mfrow = c(2, 2)) 
+acf_plot<-acf(data_serie, main= "Função de Autocorrelação")
+pacf_plot<-pacf(data_serie, main = "Função de Autocorrelação Parcial")
 
 ```
 
 
 
-
-```{r}
+```{r, include=FALSE}
 
 modelo_ets <- ets(data_serie)
 
@@ -101,9 +108,6 @@ ggqqplot(modelo_ets$residuals)+ggtitle("Res?duos Modelo SES")
 
 # verificar - Sazonalidade, raiz unitaria e tendencia
 
-
-
-
 tend_determ(data_serie)
 
 raiz_unit(data_serie)
@@ -113,33 +117,23 @@ sazonalidade(data_serie)
 # resultado - 
 ```
 
-```{r}
-
-decomposicao <- decompose(ts(data_serie, frequency = 12))
-
-plot(decomposicao)
-
-```
 
 
-```{r}
+```{r, include=FALSE}
 # diferenciação
 
-data_serie_diff<-diff(data_serie,differences = 1)
-plot(data_serie_diff)
-acf(data_serie_diff)
-adf.test(data_serie_diff, alternative = "stationary")
-
-tend_determ(data_serie_diff)
-
-raiz_unit(data_serie_diff)
-
-sazonalidade(data_serie_diff)
-
-plot(data_serie_diff)
-
-
-
+# data_serie_diff<-diff(data_serie,differences = 1)
+# plot(data_serie_diff)
+# acf(data_serie_diff)
+# adf.test(data_serie_diff, alternative = "stationary")
+# 
+# tend_determ(data_serie_diff)
+# 
+# raiz_unit(data_serie_diff)
+# 
+# sazonalidade(data_serie_diff)
+# 
+# plot(data_serie_diff)
 
 ```
 
