@@ -84,27 +84,10 @@ pacf_plot<-pacf(data_serie, main = "Função de Autocorrelação Parcial")
 
 ```
 
+Resultados de tendência, raiz unitária e sazonalidade
 
 
 ```{r, include=FALSE}
-
-modelo_ets <- ets(data_serie)
-
-summary(modelo_ets)
-
-tsdisplay(modelo_ets$residuals)
-Box.test(modelo_ets$residuals,lag=10)
-
-modelo_ets$residuals
-
-checkresiduals(modelo_ets)
-
-ggqqplot(modelo_ets$residuals)+ggtitle("Res?duos Modelo SES")
-```
-
-
-
-```{r}
 
 # verificar - Sazonalidade, raiz unitaria e tendencia
 
@@ -116,6 +99,44 @@ sazonalidade(data_serie)
 
 # resultado - 
 ```
+
+
+
+
+```{r, include=FALSE}
+
+modelo_ets <- ets(data_serie, model = "MAN", damped = TRUE)
+
+summary(modelo_ets)
+
+Box.test(modelo_ets$residuals,lag=10)
+
+#modelo_ets$residuals
+
+#checkresiduals(modelo_ets)
+```
+
+```{r, echo=FALSE}
+checkresiduals(modelo_ets, test = F)
+```
+
+```{r, echo=FALSE}
+
+#tsdisplay(modelo_ets$residuals, main = "Modelo MAN - Resíduos")
+
+
+
+```
+
+
+```{r, echo=FALSE, message=FALSE}
+
+ggqqplot(modelo_ets$residuals)+
+  ggtitle("Resíduos Modelo MAN") +
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+```
+
 
 
 
@@ -139,7 +160,7 @@ sazonalidade(data_serie)
 
 
 
-```{r}
+```{r, include=FALSE}
 arima_model<-auto.arima(data_serie)
 
 summary(arima_model)

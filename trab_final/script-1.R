@@ -85,7 +85,7 @@ summary(modelo_ets_2)
 Box.test(modelo_ets_2$residuals,  lag = 10, type = "Ljung-Box")
 
 
-forecast_ets <- forecast(modelo_ets_2, h = 24)
+forecast_ets <- forecast(modelo_ets_2, h = 12)
 plot(forecast_ets)
 lines(test, col = "red")
 
