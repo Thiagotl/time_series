@@ -66,7 +66,9 @@ data_serie<-ts(media_mensal$Average_Price, frequency=12, start=c(2013,1))
 
 # Introdução 
 
-Nesta seção são apresentados os dados referentes a análise da série temporal de precificação mensal do ouro, entre os anos de 2013 e 2023. O banco de dados pode ser encontrado no link XXXXXXX. 
+O ouro é um ativo financeiro para exportação, investimentos de longo prazo, consumo industrial e câmbio de moedas estrangeiras.  Segundo The Gold Bullion Company, o Brasil ocupa o 7° lugar no balanço mundial de oferta e demanda de ouro, com este contexto foi feito uma análise da série histórica do preço de comercialização do ouro entre os anos de 2013 a 2023. O *Dataset* utilizado pode ser acesso neste [link]{#https://www.kaggle.com/code/farzadnekouei/gold-price-prediction-lstm-96-accuracy}
+
+
 
 
 ```{r, echo=FALSE, fig.align='center',label="fig1"}
@@ -136,6 +138,15 @@ ggqqplot(modelo_ets$residuals)+
   theme(plot.title = element_text(hjust = 0.5)) 
 
 ```
+
+
+```{r}
+forecast_ets <- forecast(modelo_ets, h = 12)
+plot(forecast_ets)
+
+```
+
+
 
 
 
