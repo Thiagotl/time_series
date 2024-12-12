@@ -131,7 +131,7 @@ Testes de Raiz unitária
 \begin{table}[H]
 \centering
 \caption{Teste de Raiz Unitária}
-\label{table:tab2}
+\label{table:tab3}
 \begin{tabular}{lcc}
 \hline
 \multicolumn{1}{c}{Teste} & p-valor & Conclusão \\ \hline
@@ -142,11 +142,28 @@ KPSS Test for Level       & 0.0100  & Tendência \\ \hline
 \end{table}
 
 
+Teste de Sazonalidade 
 
 
+\begin{table}[H]
+\centering
+\caption{Teste de Sazonalidade}
+\label{table:tab3}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\multicolumn{1}{c}{Teste} & p-valor & Conclusão   \\ \midrule
+Kruskall Wallis           & 0.9991  & Não Sazonal \\
+Friedman rank             & 0.8554  & Não sazonal \\ \bottomrule
+\end{tabular}
+\end{table}
 
+XXX
 
+Modelo EST
 
+Medidas de qualidade(precisão)  do modelo.
+
+o teste de Box-Pierce com lag 10, p-valor igual a 0.08726
 ```{r, include=FALSE}
 
 modelo_ets <- ets(data_serie, model = "MAN", damped = TRUE)
@@ -160,9 +177,21 @@ Box.test(modelo_ets$residuals,lag=10)
 #checkresiduals(modelo_ets)
 ```
 
-```{r, echo=FALSE}
-checkresiduals(modelo_ets, test = F)
-```
+\begin{table}[H]
+\centering
+\caption{Medidas de Precisão}
+\label{table:tab4}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\multicolumn{1}{c}{Medida} & \multicolumn{1}{c}{Valor} \\ \midrule
+AIC                        & 1500.932                  \\
+RMSE                       & 46.02785                  \\
+MAE                        & 36.68431                  \\
+MPE                        & 0.06388472                \\
+MAPE                       & 2.550386                  \\
+MASE                       & 0.2698339                 \\ \bottomrule
+\end{tabular}
+\end{table}
 
 ```{r, echo=FALSE}
 
@@ -171,6 +200,13 @@ checkresiduals(modelo_ets, test = F)
 
 
 ```
+
+Análise de Resíduos
+
+```{r, echo=FALSE}
+checkresiduals(modelo_ets, test = F) 
+```
+
 
 
 ```{r, echo=FALSE, message=FALSE}
@@ -182,7 +218,7 @@ ggqqplot(modelo_ets$residuals)+
 ```
 
 
-```{r}
+```{r, echo=FALSE, message=FALSE}
 forecast_ets <- forecast(modelo_ets, h = 12)
 plot(forecast_ets)
 
@@ -214,13 +250,13 @@ plot(forecast_ets)
 
 
 ```{r, include=FALSE}
-arima_model<-auto.arima(data_serie)
-
-summary(arima_model)
-
-checkresiduals(arima_model)
-
-ggqqplot(arima_model$residuals)+ggtitle("Res?duos Modelo SES")
+# arima_model<-auto.arima(data_serie)
+# 
+# summary(arima_model)
+# 
+# checkresiduals(arima_model)
+# 
+# ggqqplot(arima_model$residuals)+ggtitle("Res?duos Modelo SES")
 
 
 ```
