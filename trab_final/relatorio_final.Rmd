@@ -67,9 +67,9 @@ data_serie<-ts(media_mensal$Average_Price, frequency=12, start=c(2013,1))
 
 # Introdução 
 
-O ouro é um ativo financeiro para exportação, investimentos de longo prazo, consumo industrial e câmbio de moedas estrangeiras.  Segundo The Gold Bullion Company, o Brasil ocupa o 7° lugar no balanço mundial de oferta e demanda de ouro, com este contexto foi feito uma análise da série histórica do preço de comercialização do ouro entre os anos de 2013 a 2023. O *Dataset* utilizado pode ser acesso neste [link]{https://www.kaggle.com/code/farzadnekouei/gold-price-prediction-lstm-96-accuracy}.
+O ouro é um ativo financeiro para exportação, investimentos de longo prazo, consumo industrial e câmbio de moedas estrangeiras.  Segundo The Gold Bullion Company, o Brasil ocupa o 7° lugar no balanço mundial de oferta e demanda de ouro, com este contexto foi feito uma análise da série histórica do preço de comercialização do ouro(em quilogramas) entre os anos de 2013 a 2023. O *Dataset* utilizado pode ser acesso neste [link](https://www.kaggle.com/code/farzadnekouei/gold-price-prediction-lstm-96-accuracy).
 
-A Figura \ref{fig:fig1}, apresenta a série temporal da precificação do ouro para os anos de 2013 até 2023.   
+A Figura \ref{fig:fig1}, apresenta a série temporal da precificação mensal do ouro para os anos de 2013 até 2023. Em primeiro momento, de forma visual, nota-se que a série não possui sazonalidade, por conseguinte podemos observar um aumento significativo no preço do ouro entre 2019 a 2021.   
 
 
 ```{r, echo=FALSE, fig.align='center', fig.cap='Precificação mensal do Ouro - 2013 à 2023',label='fig1'}
@@ -80,7 +80,7 @@ plot(data_serie, ylab = "Preço Mensal")
 ```
 
 
-A Figura \ref{fig:fig2} apresenta a os resultados de Funcação de Autocorrelação e a Função de Autocorrelação Parical.
+A Figura \ref{fig:fig2} apresenta a os resultados de Funcação de Autocorrelação e a Função de Autocorrelação Parcial.
 
 ```{r, echo=FALSE, , fig.cap="FAC e FACP",label="fig2", fig.width=10, fig.height=8, fig.align='center'}
 par(mfrow = c(2, 2)) 
@@ -161,7 +161,7 @@ XXX
 
 Modelo EST
 
-Medidas de qualidade(precisão)  do modelo.
+Medidas de qualidade(acuracia) do modelo.
 
 o teste de Box-Pierce com lag 10, p-valor igual a 0.08726
 ```{r, include=FALSE}
@@ -217,6 +217,7 @@ ggqqplot(modelo_ets$residuals)+
 
 ```
 
+Predição
 
 ```{r, echo=FALSE, message=FALSE}
 forecast_ets <- forecast(modelo_ets, h = 12)
@@ -225,7 +226,7 @@ plot(forecast_ets)
 ```
 
 
-
+# Conclusão
 
 
 
