@@ -1,6 +1,6 @@
 ---
 title: "Séries Temporais"
-author: "Thiago Tavares Lopes Lucas de Bona Sartor"
+author: "Thiago Tavares Lopes  Lucas de Bona Sartor"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 header-includes:
    - \usepackage[brazil]{babel}
@@ -8,6 +8,7 @@ header-includes:
    - \usepackage{float}
    - \usepackage{multirow}
    - \usepackage{tabularx}
+   - \usepackage{booktabs}
 geometry: left=2.5cm, right=2.5cm, top=2cm, bottom=2cm
 output:
   bookdown::pdf_document2:
@@ -66,28 +67,30 @@ data_serie<-ts(media_mensal$Average_Price, frequency=12, start=c(2013,1))
 
 # Introdução 
 
-O ouro é um ativo financeiro para exportação, investimentos de longo prazo, consumo industrial e câmbio de moedas estrangeiras.  Segundo The Gold Bullion Company, o Brasil ocupa o 7° lugar no balanço mundial de oferta e demanda de ouro, com este contexto foi feito uma análise da série histórica do preço de comercialização do ouro entre os anos de 2013 a 2023. O *Dataset* utilizado pode ser acesso neste [link]{#https://www.kaggle.com/code/farzadnekouei/gold-price-prediction-lstm-96-accuracy}
+O ouro é um ativo financeiro para exportação, investimentos de longo prazo, consumo industrial e câmbio de moedas estrangeiras.  Segundo The Gold Bullion Company, o Brasil ocupa o 7° lugar no balanço mundial de oferta e demanda de ouro, com este contexto foi feito uma análise da série histórica do preço de comercialização do ouro entre os anos de 2013 a 2023. O *Dataset* utilizado pode ser acesso neste [link]{https://www.kaggle.com/code/farzadnekouei/gold-price-prediction-lstm-96-accuracy}.
+
+A Figura \ref{fig:fig1}, apresenta a série temporal da precificação do ouro para os anos de 2013 até 2023.   
 
 
-
-
-```{r, echo=FALSE, fig.align='center',label="fig1"}
+```{r, echo=FALSE, fig.align='center', fig.cap='Precificação mensal do Ouro - 2013 à 2023',label='fig1'}
 # Gráficos
 
-plot(data_serie, ylab = "Preço Mensal" ,main = "Precificação mensal do Ouro - 2013 a 2023")
+plot(data_serie, ylab = "Preço Mensal")
 
 ```
 
 
-```{r, echo=FALSE, label="fig2", fig.width=10, fig.height=8, fig.align='center'}
+A Figura \ref{fig:fig2} apresenta a os resultados de Funcação de Autocorrelação e a Função de Autocorrelação Parical.
+
+```{r, echo=FALSE, , fig.cap="FAC e FACP",label="fig2", fig.width=10, fig.height=8, fig.align='center'}
 par(mfrow = c(2, 2)) 
 acf_plot<-acf(data_serie, main= "Função de Autocorrelação")
 pacf_plot<-pacf(data_serie, main = "Função de Autocorrelação Parcial")
 
 ```
 
-Resultados de tendência, raiz unitária e sazonalidade
 
+\newpage
 
 ```{r, include=FALSE}
 
@@ -101,6 +104,45 @@ sazonalidade(data_serie)
 
 # resultado - 
 ```
+
+
+Resultados de tendência, raiz unitária e sazonalidade
+
+Resultados Tedência deterministica \ref{table:tab1}
+
+\begin{table}[H]
+\centering
+\caption{Teste de Tedência determinística}
+\label{table:tab1}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\multicolumn{1}{c}{Teste} & p-valor & Conclusão \\ \midrule
+Cox Stuart                & 0.0     & Tendência \\
+Cox Stuart Trend          & 0.0     & Tendência \\
+Mann-Kendall Trend        & 0.0     & Tendência \\
+Mann-Kendall              & 0.0     & Tendência \\
+KPSS Test for Trend       & 0.0     & Tendência \\ \bottomrule
+\end{tabular}
+\end{table}
+
+
+Testes de Raiz unitária
+
+\begin{table}[H]
+\centering
+\caption{Teste de Raiz Unitária}
+\label{table:tab2}
+\begin{tabular}{lcc}
+\hline
+\multicolumn{1}{c}{Teste} & p-valor & Conclusão \\ \hline
+Augmented Dickey-Fuller   & 0.3553  & Tendência \\
+Phillips-Perron Unit Root & 0.5252  & Tendência \\
+KPSS Test for Level       & 0.0100  & Tendência \\ \hline
+\end{tabular}
+\end{table}
+
+
+
 
 
 
