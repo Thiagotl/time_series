@@ -34,7 +34,7 @@ suppressMessages(library(tidyverse))
 suppressMessages(library(readr))
 suppressMessages(library(ggpubr))
 suppressMessages(library(ggplot2))
-
+suppressMessages(library(kableExtra))
 
 source("functions.R")
 ```
@@ -92,9 +92,24 @@ pacf_plot<-pacf(data_serie, main = "Função de Autocorrelação Parcial")
 
 \newpage
 # Análise da Série Temporal 
-Neste seção são apresentados os resultados da análise descritiva da série temporal.
+Neste seção são apresentados os resultados da análise da série temporal.
 
 ## Análise Descritiva
+
+A Tabela \ref{tab:tab0} apresenta os resuldadod descrivos da série temporal, em que temos como o valor mínimo de comercialização do ouro 1068,6 dolares e seu valor máximo  1971,8 dolares, por último sua média foi de 1440,1 dolares. 
+
+```{r, echo=FALSE, fig.cap="Resultados Descritivos", label="tab0"}
+sumario<-summary(media_mensal$Average_Price)
+sumario<-as.data.frame(as.list(sumario))
+kable(sumario, caption = "Resultados Descritivos",booktabs = T) |> 
+  kable_styling(latex_options = c("striped", "hold_position"))
+
+```
+
+
+
+
+## Resultados de Tendência Determinística
 
 ```{r, include=FALSE}
 
@@ -109,8 +124,6 @@ sazonalidade(data_serie)
 # resultado - 
 ```
 
-
-## Resultados de Tendência Determinística
 
 A Tabela \ref{table:tab1} apresenta os resultados dos testes aplicados para verificar a presença de tendência determinística nos dados. Foram utilizados os testes Cox Stuart, Cox Stuart Trend, Mann-Kendall Trend, Mann-Kendall e KPSS para tendência. Em todos os casos, o p-valor obtido foi 0,0, indicando a rejeição da hipótese nula de ausência de tendência determinística. Com base nesses resultados, conclui-se que os dados analisados apresentam uma tendência clara e significativa.
 
