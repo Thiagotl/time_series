@@ -9,7 +9,7 @@ header-includes:
    - \usepackage{multirow}
    - \usepackage{tabularx}
    - \usepackage{booktabs}
-geometry: left=2.5cm, right=2.5cm, top=2cm, bottom=2cm
+geometry: left=2.5cm, right=2.5cm, top=2cm, bottom=1.5cm
 output:
   bookdown::pdf_document2:
     fig.align: 'center'
@@ -239,7 +239,7 @@ checkresiduals(modelo_ets, test = F)
 Por último, a Figura \ref{fig:qqplot} apresenta o gráfico QQ-Plot e avalia a normalidade dos resíduos do modelo ETS(M,Ad,N). Nota-se que os pontos estão majoritariamente alinhados com a linha de referência, indicando que os resíduos seguem, em grande parte, uma distribuição normal. Por cosneguinte, algumas discrepâncias são visíveis nas extremidades, mas estão dentro da faixa de confiança. Esses resultados reforçam a adequação do modelo, pois a normalidade dos resíduos é uma suposição importante para validação de modelos de séries temporais.
 
 
-```{r, echo=FALSE, message=FALSE, fig.cap="Resíduos Modelo MAdN", label='qqplot', fig.align='center', fig.width=6, fig.height=4}
+```{r, echo=FALSE, message=FALSE, fig.cap="Resíduos Modelo MAdN", label='qqplot', fig.align='center',  out.width = "52%"}
 
 ggqqplot(modelo_ets$residuals)+
   ggtitle("") +
