@@ -82,7 +82,7 @@ plot(data_serie, ylab = "Preço Mensal")
 \newpage
 A Figura \ref{fig:fig2} apresenta a os resultados de Funcação de Autocorrelação e a Função de Autocorrelação Parcial.
 
-```{r, echo=FALSE, , fig.cap="FAC e FACP",label="fig2", fig.width=10, fig.height=8, fig.align='center'}
+```{r, echo=FALSE,  fig.cap="FAC e FACP",label="fig2", fig.width=10, fig.height=8, fig.align='center'}
 par(mfrow = c(2, 2)) 
 acf_plot<-acf(data_serie, main= "Função de Autocorrelação")
 pacf_plot<-pacf(data_serie, main = "Função de Autocorrelação Parcial")
@@ -227,17 +227,20 @@ MASE                       & 0.2698339                 \\ \bottomrule
 
 # Análise de Resíduos
 
-Neste seção são apresentados os resultados da análise dos resíduos do modelo para série. Primeiramente,  foi feito o teste de Box-Pierce com lag 10 e com $\alpha=5\%$, para avaliar a presenção de autocorrelação dos resíduos. Por conseguinte, o p-valor obtido foi de 0.08726
-```{r, echo=FALSE}
+Neste seção são apresentados os resultados da análise dos resíduos do modelo para série. Primeiramente,  foi feito o teste de Box-Pierce com lag 10 e com $\alpha=5\%$, para avaliar a presenção de autocorrelação dos resíduos. Por conseguinte, o p-valor obtido foi de 0.08726, não rejeitamos a hipótese nula de que os resíduos são independentes, ou seja, não há correlação significativa dos resíduos.
+
+A Figura \ref{fig:residuos}, apresenta os resultados gráficos da análise de resíduos. O gráfico superior mostra a série de resíduos ao longo do tempo e evidencia que eles estão em torno de zero, sem a presença de tendências ou padrões, isto sugere que o modelo conseguiu capturar adequadamente a estrutura da série temporal. Ademais, O gráfico de autocorrelação (ACF) dos resíduos, apresentado no canto inferior esquerdo, revela que a maioria dos coeficientes de autocorrelação está dentro dos intervalos de confiança, indicando a ausência de autocorrelação significativa nos resíduos. Essa conclusão é corroborada pelo resultado do teste de Box-Pierce, cujo p-valor não rejeita a hipótese nula de independência dos resíduos. Além disso, o histograma dos resíduos, no canto inferior direito, mostra uma distribuição aproximadamente simétrica e próxima de uma normal, com uma curva de densidade sobreposta confirmando esse comportamento. Esses resultados apontam para a adequação do modelo ETS(M,Ad,N), já que os resíduos não apresentam padrões significativos, são independentes e possuem uma distribuição compatível com as suposições do modelo.
+
+```{r, echo=FALSE, fig.cap="Resíduos", label="residuos", fig.align='center'}
 checkresiduals(modelo_ets, test = F) 
 ```
 
+Por último, 
 
-
-```{r, echo=FALSE, message=FALSE}
+```{r, echo=FALSE, message=FALSE, fig.cap="Resíduos Modelo MAdN", label='qqplot', fig.align='center', fig.width=10, fig.height=6}
 
 ggqqplot(modelo_ets$residuals)+
-  ggtitle("Resíduos Modelo MAN") +
+  ggtitle("") +
   theme(plot.title = element_text(hjust = 0.5)) 
 
 ```
