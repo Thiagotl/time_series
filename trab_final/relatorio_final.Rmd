@@ -79,7 +79,7 @@ plot(data_serie, ylab = "Preço Mensal")
 
 ```
 
-
+\newpage
 A Figura \ref{fig:fig2} apresenta a os resultados de Funcação de Autocorrelação e a Função de Autocorrelação Parcial.
 
 ```{r, echo=FALSE, , fig.cap="FAC e FACP",label="fig2", fig.width=10, fig.height=8, fig.align='center'}
@@ -91,6 +91,10 @@ pacf_plot<-pacf(data_serie, main = "Função de Autocorrelação Parcial")
 
 
 \newpage
+# Análise da Série Temporal 
+Neste seção são apresentados os resultados da análise descritiva da série temporal.
+
+## Análise Descritiva
 
 ```{r, include=FALSE}
 
@@ -106,9 +110,9 @@ sazonalidade(data_serie)
 ```
 
 
-Resultados de tendência, raiz unitária e sazonalidade
+## Resultados de Tendência Determinística
 
-Resultados Tedência deterministica \ref{table:tab1}
+A Tabela \ref{table:tab1} apresenta os resultados dos testes aplicados para verificar a presença de tendência determinística nos dados. Foram utilizados os testes Cox Stuart, Cox Stuart Trend, Mann-Kendall Trend, Mann-Kendall e KPSS para tendência. Em todos os casos, o p-valor obtido foi 0,0, indicando a rejeição da hipótese nula de ausência de tendência determinística. Com base nesses resultados, conclui-se que os dados analisados apresentam uma tendência clara e significativa.
 
 \begin{table}[H]
 \centering
@@ -125,13 +129,14 @@ KPSS Test for Trend       & 0.0     & Tendência \\ \bottomrule
 \end{tabular}
 \end{table}
 
+## Resultados de Tedência Estocástica - Raiz Unitária
 
-Testes de Raiz unitária
+A Tabela \ref{table:tab2} apresenta os resultados dos testes de raiz unitária aplicados para avaliar a estacionaridade dos dados. Os testes utilizados foram: Augmented Dickey-Fuller, Phillips-Perron e KPSS. Para os testes Augmented Dickey-Fuller e Phillips-Perron, os p-valores encontrados foram 0,3553 e 0,5252, respectivamente, indicando a não rejeição da hipótese nula de presença de raiz unitária. Já no teste KPSS, o p-valor obtido foi 0,0100, levando à rejeição da hipótese nula de estacionaridade. Com base nos resultados, conclui-se que os dados apresentam uma tendência, não sendo estacionários em nível.
 
 \begin{table}[H]
 \centering
 \caption{Teste de Raiz Unitária}
-\label{table:tab3}
+\label{table:tab2}
 \begin{tabular}{lcc}
 \hline
 \multicolumn{1}{c}{Teste} & p-valor & Conclusão \\ \hline
@@ -141,8 +146,8 @@ KPSS Test for Level       & 0.0100  & Tendência \\ \hline
 \end{tabular}
 \end{table}
 
-
-Teste de Sazonalidade 
+## Testes de Sazonalidade 
+A Tabela \ref{table:tab3} apresenta os resultados dos testes estatísticos realizados para verificar a presença de sazonalidade nos dados. Foram aplicados dois testes: o teste de Kruskal-Wallis e o teste de Friedman. O p-valor obtido no teste de Kruskal-Wallis foi de 0,9991, enquanto no teste de Friedman foi de 0,8554. Em ambos os casos, os p-valores são significativamente superiores ao nível de significância comumente adotado ($\alpha$ = 0,05). Assim, não se rejeita a hipótese nula de ausência de sazonalidade, indicando que os dados analisados não apresentam evidências de comportamento sazonal.
 
 
 \begin{table}[H]
@@ -157,13 +162,32 @@ Friedman rank             & 0.8554  & Não sazonal \\ \bottomrule
 \end{tabular}
 \end{table}
 
-XXX
+# Modelo Final
 
-Modelo EST
+Para a série original foi aplicado um modelo de suavização exponencial. Temos que o estrutura do modelo da seguinte forma: 
 
-Medidas de qualidade(acuracia) do modelo.
 
-o teste de Box-Pierce com lag 10, p-valor igual a 0.08726
+$$
+\mu_{t} = \ell_{t-1}+\phi b_{t-1}
+$$ 
+
+$$
+\ell_{t} = \ell_{t-1}+\phi b_{t-1}+\alpha \epsilon_t
+$$
+
+$$
+b_{t} = \phi b_{t-1}+\beta \epsilon_t
+$$
+
+Por conseguinte, a estrutura do modelo apresenta componentes multiplicativo para o erro (M), tendência aditiva suavizada (Ad) e ausência de sazonalidade (N). O modelo apresenta os seguintes parâmetros de suavização: $\alpha = 0.9999$ e $\beta = 0.0933$ e $\phi=0.8$.
+
+Ademais, ss estados iniciais estimados foram $l = 1677.808$ para o nível e $b=-26.0755$ para tedência. O desvio padrão dos erros $\sigma$ é igual a 0.0326 indicando uma boa adequação do modelo da série. 
+
+A Tabela \ref{table:tab4} apresenta os resultados de medidas de acurácia do modelo, ou seja, são informações de qualidade do ajuste. Temos os seguinte valores: AIC=1500.932, RMSE de 46,02785 e um MAE de 36,68431, O erro percentual médio (MPE) foi de 0,0639\%, e o erro percentual absoluto médio (MAPE) foi de 2,55\%, por último o erro padronizado absoluto médio (MASE) foi de 0,2698.
+Esses valores sugerem que o modelo é parcimonioso e bem ajustado à série.
+
+
+
 ```{r, include=FALSE}
 
 modelo_ets <- ets(data_serie, model = "MAN", damped = TRUE)
@@ -201,8 +225,9 @@ MASE                       & 0.2698339                 \\ \bottomrule
 
 ```
 
-Análise de Resíduos
+# Análise de Resíduos
 
+Neste seção são apresentados os resultados da análise dos resíduos do modelo para série. Primeiramente,  foi feito o teste de Box-Pierce com lag 10, para avaliar a presenção p-valor igual a 0.08726
 ```{r, echo=FALSE}
 checkresiduals(modelo_ets, test = F) 
 ```
@@ -217,7 +242,7 @@ ggqqplot(modelo_ets$residuals)+
 
 ```
 
-Predição
+# Análise de Previsão
 
 ```{r, echo=FALSE, message=FALSE}
 forecast_ets <- forecast(modelo_ets, h = 12)
@@ -233,7 +258,7 @@ plot(forecast_ets)
 ```{r, include=FALSE}
 # diferenciação
 
-# data_serie_diff<-diff(data_serie,differences = 1)
+#data_serie_diff<-diff(data_serie,differences = 1)
 # plot(data_serie_diff)
 # acf(data_serie_diff)
 # adf.test(data_serie_diff, alternative = "stationary")
@@ -251,13 +276,13 @@ plot(forecast_ets)
 
 
 ```{r, include=FALSE}
-# arima_model<-auto.arima(data_serie)
+#arima_model<-auto.arima(data_serie_diff)
 # 
-# summary(arima_model)
+#summary(arima_model)
 # 
-# checkresiduals(arima_model)
+#checkresiduals(arima_model)
 # 
-# ggqqplot(arima_model$residuals)+ggtitle("Res?duos Modelo SES")
+#ggqqplot(arima_model$residuals)+ggtitle("Res?duos Modelo SES")
 
 
 ```
