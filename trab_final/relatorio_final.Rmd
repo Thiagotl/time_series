@@ -280,7 +280,9 @@ plot(forecast_ets)
 \newpage
 # Conclusão
 
+Por fim, a aplicação do modelo ETS(M,Ad,N) à série temporal dos preços do ouro entre 2013 e 2023 apresentou resultados satisfatórios, o  modelo foi capaz de capturar adequadamente os padrões e a estrutura dos dados, sem evidências significativas de autocorrelação nos resíduos, como demonstrado pelo teste de Box-Pierce e pelas análises gráficas. Além disso, os resíduos mostraram uma distribuição aproximadamente normal, reforçando a adequação do modelo.
 
+Portanto, as previsões realizadas pelo modelo são coerentes com os dados históricos, e os intervalos de confiança refletem de forma adequada a incerteza associada.Então, o desempenho do modelo, avaliado por métricas como RMSE, MAE e MAPE, também indica uma boa qualidade de ajuste. Assim sendo, o modelo ETS(M,Ad,N) se mostrou uma ferramenta confiável para prever o comportamento futuro da série temporal analisada, fornecendo informações úteis para a compreensão e análise prospectiva dos preços do ouro.
 
 ```{r, include=FALSE}
 # diferenciação
