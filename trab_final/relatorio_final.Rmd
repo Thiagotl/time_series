@@ -229,15 +229,17 @@ MASE                       & 0.2698339                 \\ \bottomrule
 
 Neste seção são apresentados os resultados da análise dos resíduos do modelo para série. Primeiramente,  foi feito o teste de Box-Pierce com lag 10 e com $\alpha=5\%$, para avaliar a presenção de autocorrelação dos resíduos. Por conseguinte, o p-valor obtido foi de 0.08726, não rejeitamos a hipótese nula de que os resíduos são independentes, ou seja, não há correlação significativa dos resíduos.
 
-A Figura \ref{fig:residuos}, apresenta os resultados gráficos da análise de resíduos. O gráfico superior mostra a série de resíduos ao longo do tempo e evidencia que eles estão em torno de zero, sem a presença de tendências ou padrões, isto sugere que o modelo conseguiu capturar adequadamente a estrutura da série temporal. Ademais, O gráfico de autocorrelação (ACF) dos resíduos, apresentado no canto inferior esquerdo, revela que a maioria dos coeficientes de autocorrelação está dentro dos intervalos de confiança, indicando a ausência de autocorrelação significativa nos resíduos. Essa conclusão é corroborada pelo resultado do teste de Box-Pierce, cujo p-valor não rejeita a hipótese nula de independência dos resíduos. Além disso, o histograma dos resíduos, no canto inferior direito, mostra uma distribuição aproximadamente simétrica e próxima de uma normal, com uma curva de densidade sobreposta confirmando esse comportamento. Esses resultados apontam para a adequação do modelo ETS(M,Ad,N), já que os resíduos não apresentam padrões significativos, são independentes e possuem uma distribuição compatível com as suposições do modelo.
+A Figura \ref{fig:residuos} apresenta os resultados gráficos da análise de resíduos. O gráfico superior mostra a série de resíduos ao longo do tempo e evidencia que eles estão em torno de zero, sem a presença de tendências ou padrões, isto sugere que o modelo conseguiu capturar adequadamente a estrutura da série temporal. Ademais, O gráfico de autocorrelação (ACF) dos resíduos, apresentado no canto inferior esquerdo, revela que a maioria dos coeficientes de autocorrelação está dentro dos intervalos de confiança, indicando a ausência de autocorrelação significativa nos resíduos. Essa conclusão é corroborada pelo resultado do teste de Box-Pierce, cujo p-valor não rejeita a hipótese nula de independência dos resíduos. Além disso, o histograma dos resíduos, no canto inferior direito, mostra uma distribuição aproximadamente simétrica e próxima de uma normal, com uma curva de densidade sobreposta confirmando esse comportamento. Esses resultados apontam para a adequação do modelo ETS(M,Ad,N), já que os resíduos não apresentam padrões significativos, são independentes e possuem uma distribuição compatível com as suposições do modelo.
+
 
 ```{r, echo=FALSE, fig.cap="Resíduos", label="residuos", fig.align='center'}
 checkresiduals(modelo_ets, test = F) 
 ```
 
-Por último, 
+Por último, a Figura \ref{fig:qqplot} apresenta o gráfico QQ-Plot e avalia a normalidade dos resíduos do modelo ETS(M,Ad,N). Nota-se que os pontos estão majoritariamente alinhados com a linha de referência, indicando que os resíduos seguem, em grande parte, uma distribuição normal. Por cosneguinte, algumas discrepâncias são visíveis nas extremidades, mas estão dentro da faixa de confiança. Esses resultados reforçam a adequação do modelo, pois a normalidade dos resíduos é uma suposição importante para validação de modelos de séries temporais.
 
-```{r, echo=FALSE, message=FALSE, fig.cap="Resíduos Modelo MAdN", label='qqplot', fig.align='center', fig.width=10, fig.height=6}
+
+```{r, echo=FALSE, message=FALSE, fig.cap="Resíduos Modelo MAdN", label='qqplot', fig.align='center', fig.width=6, fig.height=4}
 
 ggqqplot(modelo_ets$residuals)+
   ggtitle("") +
@@ -245,15 +247,24 @@ ggqqplot(modelo_ets$residuals)+
 
 ```
 
-# Análise de Previsão
 
-```{r, echo=FALSE, message=FALSE}
+\newpage
+# Análise de Previsão
+Nesta seção são apresentados os resultados da previsão para valores futuros da série.
+O gráfico \ref{fig:previ} mostra as previsões realizadas pelo modelo ETS(M,Ad,N) para a série temporal eme studo, juntamente com os intervalos de confiança. Observa-se que as previsões seguem a tendência recente da série, indicando que o modelo conseguiu captar adequadamente o comportamento da série temporal.
+
+A faixa sombreada em azul e cinza ao redor das previsões representa os intervalos de confiança de 80% e 95%, respectivamente. Essa incerteza aumenta com o horizonte de previsão, o que é esperado devido à menor precisão em previsões de longo prazo.
+
+De maneira geral, o modelo ETS(M,Ad,N) fornece previsões coerentes com os dados históricos e apresenta intervalos de confiança que refletem a variabilidade da série, sendo uma ferramenta confiável para análise prospectiva.
+
+
+```{r, echo=FALSE, message=FALSE, fig.cap="Previsão dos Valores para o Modelo MAdN", label="previ", fig.align='center'}
 forecast_ets <- forecast(modelo_ets, h = 12)
 plot(forecast_ets)
 
 ```
 
-
+\newpage
 # Conclusão
 
 
