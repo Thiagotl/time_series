@@ -227,7 +227,7 @@ MASE                       & 0.2698339                 \\ \bottomrule
 
 # Análise de Resíduos
 
-Neste seção são apresentados os resultados da análise dos resíduos do modelo para série. Primeiramente,  foi feito o teste de Box-Pierce com lag 10, para avaliar a presenção p-valor igual a 0.08726
+Neste seção são apresentados os resultados da análise dos resíduos do modelo para série. Primeiramente,  foi feito o teste de Box-Pierce com lag 10 e com $\alpha=5\%$, para avaliar a presenção de autocorrelação dos resíduos. Por conseguinte, o p-valor obtido foi de 0.08726
 ```{r, echo=FALSE}
 checkresiduals(modelo_ets, test = F) 
 ```
