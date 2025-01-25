@@ -87,9 +87,30 @@ TSstudio::test_forecast(actual = USgas,
 
 
 
+# USAR O MODELO naive COMO REFERENCIA "Benchmark"
+
+naive_model <- forecast::naive(treino, h = 12)
 
 
+#Analisando a acurácia do modelo naive
+forecast::accuracy(naive_model, teste)
 
+#Obtendo o modelo final
+md_final <- forecast::auto.arima(USgas)
+fc_final <- forecast::forecast(md_final, h = 12)
+
+
+TSstudio::plot_forecast(fc_final,
+                        title = "Previsão para o consumo de Gás Natural USA",
+                        Xtitle = "Ano",
+                        Ytitle = "Bilhões de pés cúbicos")
+
+fc_final2 <- forecast::forecast(md_final,
+                                h = 60,
+                                level = c(80, 90))
+
+# Visualizando o valor previsto e intervalo de confiança
+fc_final2 
 
 
 
