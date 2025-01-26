@@ -113,7 +113,7 @@ fc_final2 <- forecast::forecast(md_final,
 fc_final2 
 
 
-
+f.arima1 <- forecast::checkresiduals(md)
 
 
 

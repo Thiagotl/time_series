@@ -1,8 +1,7 @@
 suppressMessages(library(forecast))
 suppressMessages(library(tseries))
-suppressMessages(library(lubridate))
 suppressMessages(library(tidyverse))
-suppressMessages(library(zoo))
+suppressMessages(library(tidyquant))
 library(readr)
 
 source("meus_estudos/functions.R")
@@ -133,9 +132,39 @@ fc_final2
 
 
 
+gold_data <- tq_get("GLD", from = "2024-01-01", to = "2025-01-10")
+
+gold_data<-gold_data |> 
+  select(date, open)
+
+
+gld_ts <- ts(gold_data$open, start = c(2024, 1), frequency = 252)
+
+train <- window(gld_ts, start = c(2024, 1), end = c(2024, 252))
+test <- window(gld_ts, start = c(2025, 1))
+
+# Plotar as duas partes
+plot(train, main = "Conjunto de Treinamento", col = "green", ylab = "Preço de Abertura")
+plot(test, main = "Conjunto de Teste", col = "red", ylab = "Preço de Abertura")
 
 
 
+md <- forecast::auto.arima(train)
+md
+arima <- forecast::checkresiduals(md)
+
+fc <- forecast::forecast(md, h=5)
+
+forecast::accuracy(fc, test)
+
+length(gld_ts)      
+length(test)        
+length(fc$mean) 
+
+
+TSstudio::test_forecast(actual = gld_ts,
+                        forecast.obj = fc,
+                        test = test)
 
 
 
