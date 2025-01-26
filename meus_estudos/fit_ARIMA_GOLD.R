@@ -101,44 +101,6 @@ TSstudio::test_forecast(actual = serie_ouro,
 
 serie_ouro_diff<-diff(serie_ouro)
 
-raiz_unit(serie_ouro_diff)
-tend_determ(serie_ouro_diff)
-
-plot(serie_ouro_diff)
-
-ouro_partitions_diff <- TSstudio::ts_split(serie_ouro_diff, sample.out = 12)
-
-ouro_treino_diff <- ouro_partitions_diff$train
-ouro_teste_diff <- ouro_partitions_diff$test
-
-
-
-
-# -- MODELO PARA SERIE DIFERENCIADA 
-md_diff<-auto.arima(ouro_treino_diff)
-md_diff
-
-# CHECAGEM DOS RESIDUOS DO md
-
-checkresiduals(md_diff)
-
-# TESTE PARA INDEPENDENCIA DOS RESIDUOS 
-Box.test(md_diff$residuals,lag=10)
-
-# --- OBTENDO O VALOR PREVISTO PARA 12 PERIODOS USANDO O MODELO md
-
-fc_diff <- forecast(md_diff,12)
-fc_diff
-
-# --- TESTANDO A ACURÁCIA DO MODELO md COMPARANDO A SÉRIE DE TESTE
-accuracy(fc_diff, ouro_teste_diff)
-
-
-TSstudio::test_forecast(actual = serie_ouro_diff,
-                        forecast.obj = fc_diff,
-                        test = ouro_teste_diff)
-
-
 
 
 # USAR O MODELO naive COMO REFERENCIA "Benchmark"
