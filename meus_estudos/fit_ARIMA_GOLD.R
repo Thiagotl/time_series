@@ -139,6 +139,14 @@ gold_data<-gold_data |>
 
 
 gld_ts <- ts(gold_data$open, start = c(2024, 1), frequency = 252)
+plot(gld_ts)
+
+acf(gld_ts)
+pacf(gld_ts)
+
+raiz_unit(gld_ts)
+tend_determ(gld_ts)
+
 
 train <- window(gld_ts, start = c(2024, 1), end = c(2024, 252))
 test <- window(gld_ts, start = c(2025, 1))

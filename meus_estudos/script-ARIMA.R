@@ -1,4 +1,9 @@
+source("meus_estudos/functions.R")
+
+
 USgas<-TSstudio::USgas
+
+View(USgas)
 
 # PREPARANDO OS DADOS 
 
@@ -20,6 +25,7 @@ USgas_partitions <- TSstudio::ts_split(USgas, sample.out = 12)
 treino <- USgas_partitions$train
 
 teste <- USgas_partitions$test
+
 
 # DETERMIAR O MODELOS AUTOMATICO PELA FUNÇÃO AUTO ARIMA
 
