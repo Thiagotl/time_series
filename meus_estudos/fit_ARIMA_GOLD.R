@@ -2,8 +2,10 @@ suppressMessages(library(forecast))
 suppressMessages(library(tseries))
 suppressMessages(library(lubridate))
 suppressMessages(library(tidyverse))
+suppressMessages(library(zoo))
 library(readr)
 
+source("meus_estudos/functions.R")
 
 
 
@@ -23,7 +25,9 @@ media_mensal <- dados |>
   mutate(Month = floor_date(Date, "month")) |>
   group_by(Month) |>
   summarise(Average_Price = mean(Price, na.rm = TRUE))
-#View(media_mensal)
+
+
+View(media_mensal)
 
 # # Identificar os dias da semana presentes
 # dias_semana_presentes <- unique(weekdays(dados$Date))
@@ -48,19 +52,6 @@ media_mensal <- dados |>
 # 
 # unique(weekdays(dados_sem_sabado$Date))
 
-serie_ouro <- ts(dados$Price,
-                             start = c(2013, 1),
-                             frequency = 365)
-
-plot(serie_ouro,
-     main = "Preço Diário do Ouro",
-     ylab = "Preço (R$)",
-     xlab = "Ano",
-     col = "black")
-
-
-
-
 
 # PARTIÇÃO DO DATASET EM TREINO E TESTE
 
@@ -71,7 +62,7 @@ ouro_teste <- ouro_partitions$test
 
 # PRIMEIRO MODELO - FIT1
 
-md <- forecast::auto.arima(treino)
+md <- auto.arima(ouro_treino)
 md
 
 # CHECAGEM DOS RESIDUOS DO md
