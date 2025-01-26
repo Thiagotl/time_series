@@ -240,7 +240,7 @@ MASE                       & 0.2698339                 \\ \bottomrule
 
 # Análise de Resíduos
 
-Neste seção são apresentados os resultados da análise dos resíduos do modelo para série. Primeiramente,  foi feito o teste de Box-Pierce com lag 10 e com $\alpha=5\%$, para avaliar a presenção de autocorrelação dos resíduos. Por conseguinte, o p-valor obtido foi de 0.08726, não rejeitamos a hipótese nula de que os resíduos são independentes, ou seja, não há correlação significativa dos resíduos.
+Neste seção são apresentados os resultados da análise dos resíduos do modelo para série. Primeiramente,  foi feito o teste de Box-Pierce com lag 10 e com $\alpha=5\%$, para avaliar a presença de autocorrelação dos resíduos. Por conseguinte, o p-valor obtido foi de 0.08726, não rejeitamos a hipótese nula de que os resíduos são independentes, ou seja, não há correlação significativa dos resíduos.
 
 A Figura \ref{fig:residuos} apresenta os resultados gráficos da análise de resíduos. O gráfico superior mostra a série de resíduos ao longo do tempo e evidencia que eles estão em torno de zero, sem a presença de tendências ou padrões, isto sugere que o modelo conseguiu capturar adequadamente a estrutura da série temporal. Ademais, O gráfico de autocorrelação (ACF) dos resíduos, apresentado no canto inferior esquerdo, revela que a maioria dos coeficientes de autocorrelação está dentro dos intervalos de confiança, indicando a ausência de autocorrelação significativa nos resíduos. Essa conclusão é corroborada pelo resultado do teste de Box-Pierce, cujo p-valor não rejeita a hipótese nula de independência dos resíduos. Além disso, o histograma dos resíduos, no canto inferior direito, mostra uma distribuição aproximadamente simétrica e próxima de uma normal, com uma curva de densidade sobreposta confirmando esse comportamento. Esses resultados apontam para a adequação do modelo ETS(M,Ad,N), já que os resíduos não apresentam padrões significativos, são independentes e possuem uma distribuição compatível com as suposições do modelo.
 
@@ -249,7 +249,7 @@ A Figura \ref{fig:residuos} apresenta os resultados gráficos da análise de res
 checkresiduals(modelo_ets, test = F) 
 ```
 
-Por último, a Figura \ref{fig:qqplot} apresenta o gráfico QQ-Plot e avalia a normalidade dos resíduos do modelo ETS(M,Ad,N). Nota-se que os pontos estão majoritariamente alinhados com a linha de referência, indicando que os resíduos seguem, em grande parte, uma distribuição normal. Por cosneguinte, algumas discrepâncias são visíveis nas extremidades, mas estão dentro da faixa de confiança. Esses resultados reforçam a adequação do modelo, pois a normalidade dos resíduos é uma suposição importante para validação de modelos de séries temporais.
+Por último, a Figura \ref{fig:qqplot} apresenta o gráfico QQ-Plot e avalia a normalidade dos resíduos do modelo ETS(M,Ad,N). Nota-se que os pontos estão majoritariamente alinhados com a linha de referência, indicando que os resíduos seguem, em grande parte, uma distribuição normal. Por conseguinte, algumas discrepâncias são visíveis nas extremidades, mas estão dentro da faixa de confiança. Esses resultados reforçam a adequação do modelo, pois a normalidade dos resíduos é uma suposição importante para validação de modelos de séries temporais.
 
 
 ```{r, echo=FALSE, message=FALSE, fig.cap="Resíduos Modelo M,Ad,N", label='qqplot', fig.align='center',  out.width = "52%"}

@@ -27,7 +27,15 @@ media_mensal <- dados |>
   summarise(Average_Price = mean(Price, na.rm = TRUE))
 
 
-View(media_mensal)
+#View(media_mensal)
+
+serie_ouro<-ts(media_mensal$Average_Price, frequency=12, start=c(2013,1))
+
+raiz_unit(serie_ouro)
+
+tend_determ(serie_ouro)
+
+sazonalidade(serie_ouro)
 
 # # Identificar os dias da semana presentes
 # dias_semana_presentes <- unique(weekdays(dados$Date))
@@ -53,9 +61,13 @@ View(media_mensal)
 # unique(weekdays(dados_sem_sabado$Date))
 
 
+acf(serie_ouro)
+
+pacf(serie_ouro)
+
 # PARTIÇÃO DO DATASET EM TREINO E TESTE
 
-ouro_partitions <- TSstudio::ts_split(serie_ouro, sample.out = 365)
+ouro_partitions <- TSstudio::ts_split(serie_ouro, sample.out = 12)
 
 ouro_treino <- ouro_partitions$train
 ouro_teste <- ouro_partitions$test
@@ -75,16 +87,57 @@ Box.test(md$residuals,lag=10)
 
 # --- OBTENDO O VALOR PREVISTO PARA 12 PERIODOS USANDO O MODELO md
 
-fc <- forecast(md,  h = length(ouro_teste))
+fc <- forecast(md,12)
 fc
 
 # --- TESTANDO A ACURÁCIA DO MODELO md COMPARANDO A SÉRIE DE TESTE
+accuracy(fc, ouro_teste)
 
 
-
-TSstudio::test_forecast(actual = USgas,
+TSstudio::test_forecast(actual = serie_ouro,
                         forecast.obj = fc,
-                        test = teste)
+                        test = ouro_teste) # o resultado foi uma porcaria
+
+
+serie_ouro_diff<-diff(serie_ouro)
+
+raiz_unit(serie_ouro_diff)
+tend_determ(serie_ouro_diff)
+
+plot(serie_ouro_diff)
+
+ouro_partitions_diff <- TSstudio::ts_split(serie_ouro_diff, sample.out = 12)
+
+ouro_treino_diff <- ouro_partitions_diff$train
+ouro_teste_diff <- ouro_partitions_diff$test
+
+
+
+
+# -- MODELO PARA SERIE DIFERENCIADA 
+md_diff<-auto.arima(ouro_treino_diff)
+md_diff
+
+# CHECAGEM DOS RESIDUOS DO md
+
+checkresiduals(md_diff)
+
+# TESTE PARA INDEPENDENCIA DOS RESIDUOS 
+Box.test(md_diff$residuals,lag=10)
+
+# --- OBTENDO O VALOR PREVISTO PARA 12 PERIODOS USANDO O MODELO md
+
+fc_diff <- forecast(md_diff,12)
+fc_diff
+
+# --- TESTANDO A ACURÁCIA DO MODELO md COMPARANDO A SÉRIE DE TESTE
+accuracy(fc_diff, ouro_teste_diff)
+
+
+TSstudio::test_forecast(actual = serie_ouro_diff,
+                        forecast.obj = fc_diff,
+                        test = ouro_teste_diff)
+
 
 
 
@@ -114,6 +167,7 @@ fc_final2 <- forecast::forecast(md_final,
 fc_final2 
 
 
+# COMO RESULTADO FINAL, OS MODELOS AQUI FICARAM UM LIXO. 
 
 
 
