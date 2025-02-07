@@ -1,9 +1,14 @@
+# links -https://rpubs.com/ramkrisp/TSstudio
+# links - https://ramikrispin.github.io/TSstudio/reference/index.html
+
 source("meus_estudos/functions.R")
 
 
 USgas<-TSstudio::USgas
 
 View(USgas)
+class(USgas)
+print(USgas)
 
 # PREPARANDO OS DADOS 
 
