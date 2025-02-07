@@ -271,4 +271,43 @@ ggplot(comparison, aes(x = ds)) +
        color = "Legenda") +
   theme_minimal()
 
+########
 
+
+library(forecast)
+mod_nn <- nnetar(cafe_treino)
+forecast_nn <- forecast(mod_nn, h = 12)
+autoplot(forecast_nn)
+
+
+autoplot(forecast_nn) + 
+  autolayer(cafe_teste, series = "Real", color = "red") +
+  ggtitle("Previsão do NNAR vs. Valores Reais") +
+  theme_minimal()
+
+checkresiduals(mod_nn)
+
+
+
+
+fc_nn<-forecast(mod_nn, h=12)
+
+
+test_forecast(actual = cafe,
+              forecast.obj = fc_nn,
+              test = cafe_teste)
+
+
+
+comparison_nn <- data.frame(ds = df_test$ds, 
+                            y_real = df_test$y, 
+                            y_pred = forecast_nn$mean)
+# Cálculo das métricas de erro
+rmse_nn <- sqrt(mean((comparison_nn$y_real - comparison_nn$y_pred)^2))
+mae_nn <- mean(abs(comparison_nn$y_real - comparison_nn$y_pred))
+mape_nn <- mean(abs((comparison_nn$y_real - comparison_nn$y_pred) / comparison_nn$y_real)) * 100
+
+# Exibir resultados
+cat("RMSE (NNAR):", rmse_nn, "\n")
+cat("MAE (NNAR):", mae_nn, "\n")
+cat("MAPE (NNAR):", mape_nn, "%\n")
