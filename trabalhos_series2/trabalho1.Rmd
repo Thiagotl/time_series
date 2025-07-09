@@ -1,0 +1,134 @@
+---
+title: "Trabalho 1 - Séries Temporais 2"
+author: "Thiago Tavares Lopes"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+---
+```{r, include=FALSE}
+source("funcoes.R")
+library(tidyverse)
+library(forecast)
+library(TSstudio)
+library(lmtest)
+library(MASS)
+library(kableExtra)
+library(knitr)
+
+```
+
+# Introdução
+
+## Descritiva
+
+Neste seção temos a uma descrição dos dados. No caso, nosso variável de interesse é `trsgi`
+
+```{r, include=FALSE}
+
+dados<-read.table("TREE_RIO_CISNE.txt", header = T)
+
+
+
+```
+
+
+```{r, echo=FALSE}
+# Descritiva 
+
+sumario<-summary(dados)
+
+sumario |> 
+  kbl(caption = "Valores descritivos dos dados") |> 
+  kable_classic(full_width = F, html_font = "Cambria")
+  
+
+```
+
+
+```{r, echo=FALSE, fig.align='center', fig.cap="Série Análisada"}
+serie<-ts(dados$trsgi, frequency = 12)
+plot(serie)
+```
+Foi adotado a tranformação Box-Cox usando o método **loglik** para normalizar a série e ajustar o modelo.
+Valor do teste de Shapiro-Wilk foi de 0,05137.
+
+
+```{r, include=FALSE}
+glambda<-BoxCox.lambda(serie,method = c("guerrero"))
+llambda<-BoxCox.lambda(serie, method = c("loglik"))
+bc21.dados<-BoxCox(serie, glambda)
+bc22.dados<-BoxCox(serie, llambda)
+
+shapiro.test(bc21.dados)
+shapiro.test(bc22.dados)
+```
+
+A série ajustada não apresentou raiz unitária, tendência deterministica e sazonalidade.
+
+```{r echo=FALSE}
+raiz <- raiz_unit(bc22.dados) 
+
+raiz$Tabela |> kbl(caption = "Resultados testes de raiz unitária") |> 
+  kable_classic(full_width = F, html_font = "Cambria")
+
+trend <- tend_determ(bc22.dados)
+
+trend$Tabela |> kbl(caption = "Resultados teste de tendência determinística") |> 
+  kable_classic(full_width = F, html_font = "Cambria")
+
+
+saz <- sazonalidade(bc22.dados)
+
+saz$Tabela |> kbl(caption = "Resultados teste de sazonalidade") |> 
+  kable_classic(full_width = F, html_font = "Cambria")
+
+
+```
+
+
+
+## Ajuste dos modelos
+
+Seção sobre os ajustes do modelos
+
+Série completa apresenta 1534 observações 
+seŕie de treino 1552 
+série de teste 12
+
+
+### Modelo 1
+
+
+
+```{r, include=FALSE}
+
+serie_part <- ts_split(bc22.dados, sample.out = 12)
+
+serie_train <- serie_part$train
+serie_test <- serie_part$test
+```
+
+
+```{r}
+# Modelo 1
+mod<-forecast::auto.arima(serie_train, seasonal = FALSE)
+forecast::checkresiduals(mod$residuals)
+
+summary(mod)
+coeftest(mod)
+
+mod_fc <- forecast(mod, h=12)
+
+acuracia_modelo1 <- accuracy(mod_fc, serie_test)
+acuracia_modelo1 <- round(acuracia_modelo1[,c(1:3, 5)], 4)
+
+test_forecast(actual = bc22.dados,
+              forecast.obj = mod_fc,
+              test = serie_test)
+
+```
+
+
+
