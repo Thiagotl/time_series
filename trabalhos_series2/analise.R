@@ -37,6 +37,13 @@ serie_part <- ts_split(bc22.dados, sample.out = 12)
 serie_train <- serie_part$train
 serie_test <- serie_part$test
 
+
+serie_part <- ts_split(serie, sample.out = 12)
+
+serie_train <- serie_part$train
+serie_test <- serie_part$test
+
+
 ### MODEL 1----
 
 mod<-forecast::auto.arima(serie_train, seasonal = FALSE)
@@ -49,11 +56,40 @@ mod_fc <- forecast(mod, h=12)
 
 accuracy(mod_fc, serie_test)
 
-test_forecast(actual = bc22.dados,
+test_forecast(actual = serie,
               forecast.obj = mod_fc,
               test = serie_test)
 
 
+### Modelo 1.1 ----
+
+mod1.1<-forecast::Arima(serie_train, order = c(3,0,0))
+forecast::checkresiduals(mod1.1$residuals)
+coeftest(mod1.1)
+
+
+mod1.1_fc <- forecast::forecast(mod1.1, h = 12)
+
+test_forecast(actual = serie,
+              forecast.obj = mod1.1_fc,
+              test = serie_test)
+
+acuracia_mod1.1 <- forecast::accuracy(mod1.1_fc, serie_test)
+acuracia_mod1.1 <- round(acuracia_mod1.1[, c(1:3,5)],4)
+
+
+
+
+mod1.2 <- forecast::Arima(serie_train, order = c(0,0,10))
+coeftest(mod1.2)
+
+forecast::checkresiduals(mod1.2$residuals)
+
+mod1.2_fc <-forecast::forecast(mod1.2, h = 12)
+
+acuracia_mod1.2 <- forecast::accuracy(mod1.2_fc, serie_test)
+
+acuracia_mod1.2 <- round(acuracia_mod1.2[, c(1:3,5)], 4)
 
 ### MODEL 2 - BOX COX----
 
