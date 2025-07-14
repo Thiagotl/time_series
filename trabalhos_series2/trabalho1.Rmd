@@ -23,13 +23,12 @@ library(knitr)
 
 ## Descritiva
 
-Neste seção temos a uma descrição dos dados. No caso, nosso variável de interesse é `trsgi`
+Neste seção temos a uma descrição dos dados, que poderá ser melhor visualizado na Tabela 1. No caso, nosso variável de interesse é `trsgi`, que apresenta mínimo de 0.4 e máximo de 1.94 aproximadamente. 
+Série completa apresenta 1534 observações, das quais 1552 foram usadas como série de treino e 12 para série de teste. Desca-se que a frequência utilizada foi de 12 meses (`h=12`).
 
 ```{r, include=FALSE}
 
 dados<-read.table("TREE_RIO_CISNE.txt", header = T)
-
-
 
 ```
 
@@ -40,19 +39,20 @@ dados<-read.table("TREE_RIO_CISNE.txt", header = T)
 sumario<-summary(dados)
 
 sumario |> 
-  kbl(caption = "Valores descritivos dos dados") |> 
+  kbl(caption = "Tabela1: Valores descritivos dos dados") |> 
   kable_classic(full_width = F, html_font = "Cambria")
   
 
 ```
-
+Temos abaixo a série e o histograma da mesma. Pelo histograma, podemos notar que a série parece possuir certa normalidade com uma leve cauda à direita, porém o teste de Shapiro-Wilk indicou um p-valor menor que 0.05. 
 
 ```{r, echo=FALSE, fig.align='center', fig.cap="Série Análisada"}
 serie<-ts(dados$trsgi, frequency = 12)
 plot(serie)
+hist(serie)
 ```
-Foi adotado a tranformação Box-Cox usando o método **loglik** para normalizar a série e ajustar o modelo.
-Valor do teste de Shapiro-Wilk foi de 0,05137.
+<!-- Foi adotado a tranformação Box-Cox usando o método **loglik** para normalizar a série e ajustar o modelo. -->
+<!-- Valor do teste de Shapiro-Wilk foi de 0,05137. -->
 
 
 ```{r, include=FALSE}
@@ -68,23 +68,23 @@ Valor do teste de Shapiro-Wilk foi de 0,05137.
 # shapiro.test(bc22.dados)
 ```
 
-A série ajustada não apresentou raiz unitária, tendência deterministica e sazonalidade.
+As Tabelas 2, 3 e 4,  apresentam os resultados dos testes de raiz unitária, tendência determinística e sazonalidade. Por conseguite, a série não apresentou nenhuma destas características.  
 
 ```{r echo=FALSE}
 raiz <- raiz_unit(serie) 
 
-raiz$Tabela |> kbl(caption = "Resultados testes de raiz unitária") |> 
+raiz$Tabela |> kbl(caption = "Tabela 2: Resultados testes de raiz unitária") |> 
   kable_classic(full_width = F, html_font = "Cambria")
 
 trend <- tend_determ(serie)
 
-trend$Tabela |> kbl(caption = "Resultados teste de tendência determinística") |> 
+trend$Tabela |> kbl(caption = "Tabela 3: Resultados teste de tendência determinística") |> 
   kable_classic(full_width = F, html_font = "Cambria")
 
 
 saz <- sazonalidade(serie)
 
-saz$Tabela |> kbl(caption = "Resultados teste de sazonalidade") |> 
+saz$Tabela |> kbl(caption = "Tabela 4: Resultados teste de sazonalidade") |> 
   kable_classic(full_width = F, html_font = "Cambria")
 
 
@@ -93,15 +93,10 @@ saz$Tabela |> kbl(caption = "Resultados teste de sazonalidade") |>
 
 
 ## Ajuste dos modelos
-
-Seção sobre os ajustes do modelos
-
-Série completa apresenta 1534 observações 
-seŕie de treino 1552 
-série de teste 12
-
+Ao todo foram criados dois modelos, um apenas com médias móveis e um outro modelos apenas com a estrutura autorregressiva.
 
 ### Modelo 1
+O primeiro modelo é do tipo AR(3) com  $\text{AIC}=-962.9$ e $\text{BIC}=-936.26$. 
 
 ```{r, include=FALSE}
 
@@ -123,6 +118,14 @@ acuracia_mod1.1 <- round(acuracia_mod1.1[, c(1:3,5)],4)
 
 ```
 
+A Tabela 5, apresenta os resultados das métricas do **modelo 1**. No conjunto de treinamento, o Erro Médio (ME) foi de 0.0002, indicando que o modelo não apresenta viés sistemático, ou seja, não tende a subestimar ou superestimar as previsões de forma consistente. Por outro lado, no conjunto de teste, o ME foi de -0.0598, sugerindo uma leve tendência do modelo a superestimar os valores reais quando aplicado a dados não vistos. Quanto à Raiz do Erro Quadrático Médio (RMSE), observou-se um valor de 0.1757 no treinamento e 0.1184 no teste, o Erro Percentual Absoluto Médio (MAPE) foi de 14.46\% no treinamento e 13.10\% no teste, indicando que, em média, as previsões do modelo apresentam um desvio percentual em torno de 14\% nos dados de treino e 13\% nos dados de teste. Em síntese, o modelo demonstrou um bom desempenho preditivo, com métricas consistentes e até mesmo melhores no conjunto de teste em comparação ao treinamento.
+
+```{r, echo=FALSE}
+
+acuracia_mod1.1 |>  kbl(caption = "Tabela 5: Métricas de ajuste do modelo 1") |> 
+  kable_classic(full_width = F, html_font = "Cambria")
+  
+```
 
 
 ```{r}
@@ -131,7 +134,7 @@ acuracia_mod1.1 <- round(acuracia_mod1.1[, c(1:3,5)],4)
 
 ```
 
-
+A seguir, são apresentados os resultados da análise dos resíduos. Em que os resíduos não apresentam autocorrelação pelo teste de Ljung-Box, indicando que o modelo foi razoável no ajuste. 
 
 ```{r, echo=FALSE, fig.align='center'}
 
@@ -139,8 +142,15 @@ forecast::checkresiduals(mod1.1$residuals)
 
 ```
 
+Por fim, o gráfico abaixo é um demonstração da série real, os valores ajustado e os valores previstos. 
 
+```{r, echo=FALSE, fig.align='center'}
 
+test_forecast(actual = serie,
+              forecast.obj = mod1.1_fc,
+              test = serie_test)
+
+```
 
 
 ```{r, include=FALSE}
@@ -171,7 +181,54 @@ forecast::checkresiduals(mod1.1$residuals)
 
 ### Modelo 2
 
+O segundo modelo criado, paresenta apenas estuturas de médias móveis MA(10), com $\text{AIC}=-962.66$ e $\text{BIC}=-898.72$. 
 
 
+```{r, include=FALSE}
+mod1.2 <- forecast::Arima(serie_train, order = c(0,0,10))
 
-# Referências
+```
+
+
+```{r}
+coeftest(mod1.2)
+```
+
+
+```{r, include=FALSE}
+mod1.2_fc <-forecast::forecast(mod1.2, h = 12)
+
+acuracia_mod1.2 <- forecast::accuracy(mod1.2_fc, serie_test)
+
+acuracia_mod1.2 <- round(acuracia_mod1.2[, c(1:3,5)], 4)
+```
+
+A Tabela 6, apresenta o resultados das métricas que avaliam a qualidade do ajuste do modelo em questão. No conjunto de treinamento, o modelo apresentou um Erro Médio (ME) de 0.0002, demonstrando equilíbrio nas previsões, sem tendência sistemática de sub ou superestimação. Contudo, no conjunto de teste, observou-se um ME de -0.0880, indicando o surgimento de um viés negativo quando aplicado a dados não vistos. Quanto à precisão das previsões, o modelo apresentou RMSE de 0.1749 no treinamento e 0.1487 no teste. Por último, a análise do MAPE revelou valores de 14.4428% e 16.7124% para treinamento e teste, respectivamente. Esta diferença de aproximadamente 2.27 pontos percentuais indica um desempenho ligeiramente inferior em dados não vistos, ainda que dentro de uma margem considerada aceitável para muitas aplicações práticas.  
+
+```{r, echo=FALSE}
+
+acuracia_mod1.2 |>  kbl(caption = "Tabela 6: Métricas de ajuste do modelo 2") |> 
+  kable_classic(full_width = F, html_font = "Cambria")
+
+```
+
+A seguir, temos a análise de resíduos do modelo,  em que pelo teste de Ljung-Box os resíduos não apresentam autocorrelção, indicando um bom ajueste do modelo. 
+
+```{r, echo=FALSE, fig.align='center'}
+# Residuals
+
+forecast::checkresiduals(mod1.2$residuals)
+
+```
+
+
+Por fim, o gráfico abaixo é um demonstração da série real, os valores ajustado e os valores previstos. 
+
+
+```{r, echo=FALSE, fig.align='center'}
+
+test_forecast(actual = serie,
+              forecast.obj = mod1.2_fc,
+              test = serie_test)
+```
+
